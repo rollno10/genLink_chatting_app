@@ -1,0 +1,55 @@
+package com.binarybachelor.genlink.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.binarybachelor.genlink.dto.UserLoginDTO;
+import com.binarybachelor.genlink.dto.UserRegisterDTO;
+import com.binarybachelor.genlink.dto.UserResponseDTO;
+import com.binarybachelor.genlink.entity.User;
+import com.binarybachelor.genlink.repository.UserRepository;
+import com.binarybachelor.genlink.security.JwtService;
+
+@Service
+public class AuthService{
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtService jwt;
+
+    public UserResponseDTO registerUser(UserRegisterDTO request){
+        
+        if(userRepository.findByMobile(request.getMobile()).isPresent()){
+            throw new RuntimeException("User already exist with the mobile");
+        }
+
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setMobile(request.getMobile());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        User saveUser = userRepository.save(user);
+
+        return new UserResponseDTO(saveUser.getId(),saveUser.getUsername(), saveUser.getMobile());
+    }
+    
+    public UserResponseDTO loginUser(UserLoginDTO request){
+
+        User user = userRepository.findByMobile(request.getMobile())
+        .orElseThrow(() -> new RuntimeException("User not Found with the Mobile "+request.getMobile()));
+    
+        boolean isPasswordValid = passwordEncoder.matches(request.getPassword(),user.getPassword());
+        if(!isPasswordValid){
+            throw new RuntimeException("invalid password");
+        }
+
+        String token = jwt.generateToken(user.getMobile());
+
+        return new UserResponseDTO(user.getId(), user.getUsername(), user.getMobile(), token);
+    }
+
+}
