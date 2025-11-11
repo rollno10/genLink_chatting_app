@@ -1,4 +1,4 @@
-package com.binarybachelor.GenLink;
+package com.binarybachelor.genLink;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
