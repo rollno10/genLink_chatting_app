@@ -1,6 +1,6 @@
 package com.binarybachelor.genlink.security;
 
-import com.binarybachelor.genlink.entity.User;
+import com.binarybachelor.genlink.entity.UserEntity;
 import com.binarybachelor.genlink.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String mobile) throws UsernameNotFoundException {
-        User user = userRepository.findByMobile(mobile)
+        UserEntity user = userRepository.findByMobile(mobile)
                 .orElseThrow(() -> new UsernameNotFoundException("Mobile Number not found with Mobile: " + mobile));
         return new CustomUserDetails(user);
     }

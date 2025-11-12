@@ -1,32 +1,27 @@
 package com.binarybachelor.genlink.security;
 
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.binarybachelor.genlink.entity.Role;
-import com.binarybachelor.genlink.entity.User;
+import com.binarybachelor.genlink.entity.UserEntity;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final UserEntity user;
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(UserEntity user) {
         this.user = user;
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Role> roles = user.getRoles();
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName())) // role.getName() must return something like "ROLE_USER"
-                .collect(Collectors.toSet());
-    }
-
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            // Temporary empty implementation
+            return Collections.emptyList();
+        }
+            
     @Override
     public String getPassword() {
         return user.getPassword();

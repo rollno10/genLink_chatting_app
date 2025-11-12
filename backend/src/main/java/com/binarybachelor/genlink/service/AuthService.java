@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.binarybachelor.genlink.dto.UserLoginDTO;
 import com.binarybachelor.genlink.dto.UserRegisterDTO;
 import com.binarybachelor.genlink.dto.UserResponseDTO;
-import com.binarybachelor.genlink.entity.User;
+import com.binarybachelor.genlink.entity.UserEntity;
 import com.binarybachelor.genlink.repository.UserRepository;
 import com.binarybachelor.genlink.security.JwtService;
 
@@ -27,19 +27,19 @@ public class AuthService{
             throw new RuntimeException("User already exist with the mobile");
         }
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setUsername(request.getUsername());
         user.setMobile(request.getMobile());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        User saveUser = userRepository.save(user);
+        UserEntity saveUser = userRepository.save(user);
 
         return new UserResponseDTO(saveUser.getId(),saveUser.getUsername(), saveUser.getMobile());
     }
     
     public UserResponseDTO loginUser(UserLoginDTO request){
 
-        User user = userRepository.findByMobile(request.getMobile())
+        UserEntity user = userRepository.findByMobile(request.getMobile())
         .orElseThrow(() -> new RuntimeException("User not Found with the Mobile "+request.getMobile()));
     
         boolean isPasswordValid = passwordEncoder.matches(request.getPassword(),user.getPassword());
