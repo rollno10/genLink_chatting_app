@@ -11,6 +11,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtService{
@@ -25,16 +26,21 @@ public class JwtService{
         Base64.getDecoder().decode(Base64.getEncoder().encodeToString(SECRET.getBytes()));
         key = Keys.hmacShaKeyFor(decodedKey);
     }
-    public String generateToken(String mobile){
+    public String generateToken(long id,String mobile){
         return Jwts.builder()
-        .subject(mobile)
+        .subject(String.valueOf(id))
+        .claim("mobile",mobile)
         .issuedAt(new Date())
         .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-        .signWith(key, Jwts.SIG.HS256)
+        .signWith(key, SignatureAlgorithm.HS256)
         .compact();
     }
 
     public String extractMobile(String token){
+        return extractAllClaims(token).get("mobile",String.class);
+    }
+
+    public String extractId(String token){
         return extractAllClaims(token).getSubject();
     }
 

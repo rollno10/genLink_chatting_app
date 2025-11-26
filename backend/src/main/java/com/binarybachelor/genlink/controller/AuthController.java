@@ -3,6 +3,7 @@ package com.binarybachelor.genlink.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import com.binarybachelor.genlink.dto.UserLoginDTO;
 import com.binarybachelor.genlink.dto.UserRegisterDTO;
@@ -17,13 +18,13 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRegisterDTO request) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegisterDTO request) {
         UserResponseDTO response = authService.registerUser(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> login(@RequestBody UserLoginDTO request) {
+    public ResponseEntity<UserResponseDTO> login(@Valid @RequestBody UserLoginDTO request) {
         UserResponseDTO response = authService.loginUser(request);
         return ResponseEntity.ok(response);
     }

@@ -1,4 +1,4 @@
-package com.binarybachelor.genlink.entity;
+package com.binarybachelor.genlink.enums;
 
 public  enum MessageStatus{
     SENT,

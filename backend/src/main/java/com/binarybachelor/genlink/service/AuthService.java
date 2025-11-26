@@ -31,10 +31,11 @@ public class AuthService{
         user.setUsername(request.getUsername());
         user.setMobile(request.getMobile());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
 
         UserEntity saveUser = userRepository.save(user);
 
-        return new UserResponseDTO(saveUser.getId(),saveUser.getUsername(), saveUser.getMobile());
+        return new UserResponseDTO(saveUser.getId(),saveUser.getUsername(), saveUser.getMobile(),saveUser.getEmail());
     }
     
     public UserResponseDTO loginUser(UserLoginDTO request){
@@ -47,7 +48,7 @@ public class AuthService{
             throw new RuntimeException("invalid password");
         }
 
-        String token = jwt.generateToken(user.getMobile());
+        String token = jwt.generateToken(user.getId(),user.getMobile());
 
         return new UserResponseDTO(user.getId(), user.getUsername(), user.getMobile(), token);
     }

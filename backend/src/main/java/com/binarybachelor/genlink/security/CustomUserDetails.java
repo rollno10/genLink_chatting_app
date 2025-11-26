@@ -29,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getMobile();
     }
 
     @Override
@@ -52,12 +52,4 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    // Optionally expose extra fields
-    public String getMobile() {
-        return user.getMobile();
-    }
-
-    public Long getId() {
-        return user.getId();
-    }
 }

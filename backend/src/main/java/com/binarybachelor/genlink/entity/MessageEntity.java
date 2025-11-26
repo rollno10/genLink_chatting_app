@@ -1,11 +1,26 @@
 package com.binarybachelor.genlink.entity;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import java.time.LocalDateTime;
-import com.binarybachelor.genlink.entity.MessageType;
-import com.binarybachelor.genlink.entity.MessageStatus;
 import com.binarybachelor.genlink.entity.UserEntity;
+import com.binarybachelor.genlink.enums.MessageStatus;
+import com.binarybachelor.genlink.enums.MessageType;
+import com.binarybachelor.genlink.messageContent.Content;
+
+import jakarta.persistence.Convert;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+
 
 @Entity
 @Table(name = "messages")
@@ -15,20 +30,21 @@ public class  MessageEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sender_id", referencedColumnName = "id")
     private UserEntity senderId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
     private UserEntity receiverId;
 
     @Column(nullable = false)
-    private String content;
+    @Convert(converter = ContentConverter.class)
+    private Content content;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private MessageType type;
+    private MessageType messageType;
 
     @Enumerated(EnumType.STRING)
     private MessageStatus status;
@@ -36,23 +52,23 @@ public class  MessageEntity{
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 
     public MessageEntity(){}
 
     public Long getId(){return id;}
 
-    public void setSender(UserEntity senderId){this.senderId = senderId;}
-    public UserEntity getSender(){return senderId;}
+    public void setSenderId(UserEntity senderId){this.senderId = senderId;}
+    public UserEntity getSenderId(){return senderId;}
 
-    public void setReceiver(UserEntity receiverId){this.receiverId = receiverId;}
-    public UserEntity getReceiver(){return receiverId;}
+    public void setReceiverId(UserEntity receiverId){this.receiverId = receiverId;}
+    public UserEntity getReceiverId(){return receiverId;}
 
-    public void setContent(String content){this.content = content;}
-    public String getContent(){return content;}
+    public void setContent(Content content){this.content = content;}
+    public Content getContent(){return content;}
 
-    public void setType(MessageType type){this.type = type;}
-    public MessageType getType(){return type;}
+    public void setMessageType(MessageType messageType){this.messageType = messageType;}
+    public MessageType getMessageType(){return messageType;}
 
     public void setStatus(MessageStatus status){this.status = status;}
     public MessageStatus getStatus(){return status;}

@@ -3,7 +3,7 @@ package com.binarybachelor.genlink.entity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
-import com.binarybachelor.genlink.entity.PresenceStatus;
+import com.binarybachelor.genlink.enums.PresenceStatus;
 import com.binarybachelor.genlink.entity.UserEntity;
 
 @Entity
