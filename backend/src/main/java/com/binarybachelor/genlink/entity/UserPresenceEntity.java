@@ -29,6 +29,7 @@ public class  UserPresenceEntity{
      public Long getId(){return id;}
     
      public LocalDateTime getLastSeenAt(){return lastSeenAt;}
+     public void setLastSeenAt(LocalDateTime lastSeenAt){this.lastSeenAt = lastSeenAt;}
     
     public void setUser(UserEntity user){this.user = user;}
     public UserEntity getUser(){return user;}

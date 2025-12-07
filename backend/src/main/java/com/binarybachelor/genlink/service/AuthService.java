@@ -3,6 +3,7 @@ package com.binarybachelor.genlink.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 
 import com.binarybachelor.genlink.dto.UserLoginDTO;
 import com.binarybachelor.genlink.dto.UserRegisterDTO;
@@ -10,12 +11,17 @@ import com.binarybachelor.genlink.dto.UserResponseDTO;
 import com.binarybachelor.genlink.entity.UserEntity;
 import com.binarybachelor.genlink.repository.UserRepository;
 import com.binarybachelor.genlink.security.JwtService;
+import com.binarybachelor.genlink.entity.UserPresenceEntity;
+import com.binarybachelor.genlink.enums.PresenceStatus;
+import com.binarybachelor.genlink.repository.UserPresenceRepository;
 
 @Service
 public class AuthService{
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserPresenceRepository userPresenceRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -34,6 +40,11 @@ public class AuthService{
         user.setEmail(request.getEmail());
 
         UserEntity saveUser = userRepository.save(user);
+
+        UserPresenceEntity userPresence = new UserPresenceEntity();
+        userPresence.setStatus(PresenceStatus.OFFLINE);
+        userPresence.setUser(saveUser);
+        userPresenceRepository.save(userPresence);
 
         return new UserResponseDTO(saveUser.getId(),saveUser.getUsername(), saveUser.getMobile(),saveUser.getEmail());
     }

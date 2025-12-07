@@ -7,5 +7,9 @@ channel = "stable-25_05"
 packages = ["openssh"]
 
 [[ports]]
+localPort = 5173
+externalPort = 5173
+
+[[ports]]
 localPort = 8080
 externalPort = 80

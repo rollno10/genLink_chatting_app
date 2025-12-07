@@ -7,5 +7,5 @@ import com.binarybachelor.genlink.entity.UserEntity;
 
 public interface UserPresenceRepository extends JpaRepository<UserPresenceEntity, Long>{
 
-   Optional<UserPresenceEntity> findByUserId(UserEntity userId);
+   Optional<UserPresenceEntity> findByUser_Id(Long userId);
 }
